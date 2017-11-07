@@ -11,6 +11,9 @@ module.exports = {
   getStatusMsgs: () => {
     return config.statusMsgs;
   },
+  getGethUrl: () => {
+    return envtConfig.gethUrl;
+  },
   getURL: () => {
     return envtConfig.url;
   }

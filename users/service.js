@@ -1,5 +1,7 @@
 'use strict';
 
+const blockchainService = require('../blockchain/service');
+
 const users = {};
 
 const signIn = (username, password) => {
@@ -8,6 +10,7 @@ const signIn = (username, password) => {
 
 const signUp = (username, password) => {
   users.username = password;
+  blockchainService.registerUser(username);
   return true;
 };
 

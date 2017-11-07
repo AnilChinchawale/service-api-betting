@@ -43,3 +43,6 @@ jspm_packages
 tmp/
 
 config.json
+
+ABI.txt
+contractAddress.txt
