@@ -38,6 +38,17 @@ describe('User Tests', () => {
           done();
         });
     });
+
+    it('cannot sign up with existing username', (done) => {
+      chai.request(completeURL)
+        .post('/sign-up')
+        .send(userJohn)
+        .end((err, res) => {
+          expect(res).to.have.status(401);
+          expect(res).to.be.an('object');
+          done();
+        });
+    });
   });
 
   describe('POST ' + apiRootURL + '/sign-in', () => {

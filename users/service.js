@@ -5,11 +5,19 @@ const blockchainService = require('../blockchain/service');
 const users = {};
 
 const signIn = (username, password) => {
-  return users.username === password;
+  username = username.toLowerCase();
+  return users[username] === password;
 };
 
 const signUp = (username, password) => {
-  users.username = password;
+  username = username.toLowerCase();
+  // username already exists?
+  if (users.hasOwnProperty(username)) {
+    return false;
+  }
+
+  // sign up users
+  users[username] = password;
   blockchainService.registerUser(username);
   return true;
 };
