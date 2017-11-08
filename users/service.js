@@ -1,6 +1,6 @@
 'use strict';
 
-const blockchainService = require('../blockchain/service');
+const blockchainService = require('../blockchain');
 
 const users = {};
 

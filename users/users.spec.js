@@ -213,4 +213,42 @@ describe('User Tests', () => {
     });
   });
 
+  describe('Prediction tests', () => {
+
+    it('user can make prediction', (done) => {
+      chai.request(completeURL)
+        .post('/predict')
+        .send({
+          username: userJohn.user,
+          prediction: 10
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(202);
+          expect(res).to.be.an('object');
+          done();
+        });
+    });
+  });
+
+  it('user can get leaderboard', (done) => {
+      chai.request(completeURL)
+        .get('/leaderboard?username=' + userJohn.username)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res).to.be.an('object');
+          done();
+        });
+    });
+
+    it('user can get wallet', (done) => {
+      chai.request(completeURL)
+        .get('/wallet?username=' + userJohn.username )
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res).to.be.an('object');
+          expect(res.body.balance).to.be.a('number');
+          done();
+        });
+    });
+
 });
