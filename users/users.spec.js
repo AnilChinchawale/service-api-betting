@@ -220,7 +220,8 @@ describe('User Tests', () => {
         .post('/predict')
         .send({
           username: userJohn.user,
-          prediction: 10
+          prediction: 456482,
+          coins: 11
         })
         .end((err, res) => {
           expect(res).to.have.status(202);

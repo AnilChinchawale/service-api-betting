@@ -4,8 +4,7 @@ const service = require('./service');
 const blockchainService = require('../blockchain');
 
 const getLeaderboard = (req, res) => {
-  req.query.username = req.query.username.toLowerCase();
-  return res.json(blockchainService.getLeaderboard(req.query.username));
+  return res.json(blockchainService.getLeaderboard());
 };
 
 const getWallet = (req, res) => {
@@ -15,7 +14,7 @@ const getWallet = (req, res) => {
 };
 
 const makePrediction = (req, res) => {
-  const txHash = blockchainService.placeBet(req.body.username, req.body.prediction);
+  const txHash = blockchainService.placeBet(req.body.username, req.body.prediction, req.body.coins);
   return res.status(202).json({ txHash });
 };
 

@@ -14,8 +14,8 @@ web3.eth.defaultAccount = web3.eth.accounts[0]; // otherwise have to specify `fr
 const contractInstance = web3.eth.contract(JSON.parse(ABI)).at(address);
 
 
-const getLeaderboard = username => {
-  const response = contractInstance.getLeaderboard(username);
+const getLeaderboard = () => {
+  const response = contractInstance.getLeaderboard();
   const users = response[0];
   const scores = response[1];
 
@@ -34,8 +34,8 @@ const getUserBalance = username => {
   return parseInt(contractInstance.getBalance(username));
 };
 
-const placeBet = (username, prediction) => {
-  return contractInstance.placeBet.sendTransaction(username, prediction);
+const placeBet = (username, prediction, betAmount) => {
+  return contractInstance.placeBet.sendTransaction(username, prediction, betAmount);
 };
 
 const registerUser = username => {
