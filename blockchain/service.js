@@ -23,8 +23,8 @@ const getLeaderboard = username => {
 
   for (let i = 0; i < users.length; i++) {
     leaderboard.push({
-      user: hexToAscii(users[i]),
-      score: parseInt(scores[i])
+      username: hexToAscii(users[i]),
+      balance: parseInt(scores[i])
     });
   }
   return leaderboard;
