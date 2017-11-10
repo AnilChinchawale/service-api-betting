@@ -18,6 +18,25 @@ const makePrediction = (req, res) => {
   return res.status(202).json({ txHash });
 };
 
+const declare = (req, res) => {
+  const txHash = blockchainService.declare();
+  return res.status(202).json({ txHash });
+};
+
+const resolve = (req, res) => {
+  const txHash = blockchainService.resolve();
+  return res.status(202).json({ txHash });
+};
+
+const newRound = (req, res) => {
+  blockchainService.newRound().then(txHash => {
+    res.status(202).json({ txHash });
+  }).catch(error => {
+    res.status(500).json({ error })
+  });
+};
+
+
 const signIn = (req, res) => {
   validateAuthFields(req, res);
   const signInStatus = service.signIn(req.body.username, req.body.password);
@@ -53,5 +72,8 @@ module.exports = {
   getWallet,
   makePrediction,
   signIn,
-  signUp
+  signUp,
+  declare,
+  resolve,
+  newRound
 };

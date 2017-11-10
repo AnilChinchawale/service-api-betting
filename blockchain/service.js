@@ -68,7 +68,7 @@ const getUserBalance = username => {
 };
 
 const placeBet = (username, prediction, betAmount) => {
- return bettingContractInstance.placeBet.sendTransaction(username, prediction, betAmount, { gas: 4712388 });
+  return bettingContractInstance.placeBet.sendTransaction(username, prediction, betAmount, { gas: 4712388 });
 };
 
 const registerUser = username => {
@@ -78,19 +78,36 @@ const registerUser = username => {
 // smart contract returns text in ascii
 const hexToAscii = hex => web3.toAscii(hex).replace(/\u0000/g, '');
 
-setTimeout(function(){
-  console.log("------Declaring winner-----");
-   return bettingContractInstance.declare.sendTransaction({ gas: 4712388 });
-},120*1000);
+// Admin methods
+const declare = () => {
+  return bettingContractInstance.declare.sendTransaction({ gas: 4712388 });
+}
 
-setTimeout(function(){
-  console.log("------resolving winner------");
-   return bettingContractInstance.resolve.sendTransaction({ gas: 4712388 });
-},180*1000);
+const resolve = () => {
+  return bettingContractInstance.resolve.sendTransaction({ gas: 4712388 });
+}
+
+const newRound = () => {
+  return new Promise((resolve, reject) => {
+    betContract.new(bettingContractInstance.address, { data: betCode, gas: 4712388 }, function (error, contract) {
+      if (typeof contract.address !== 'undefined') {
+        betContractInstance = web3.eth.contract(JSON.parse(betABI)).at(contract.address);;
+        fs.writeFileSync(__dirname + "/BetAddress.txt", betContractInstance.address);
+        return resolve(bettingContractInstance.newRound.sendTransaction(betContractInstance.address));
+      } else if (error) {
+        return reject(error);
+      }
+    });
+  });
+}
+
 
 module.exports = {
   getLeaderboard,
   getUserBalance,
   placeBet,
-  registerUser
+  registerUser,
+  declare,
+  resolve,
+  newRound
 };
