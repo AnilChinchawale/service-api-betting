@@ -5,14 +5,36 @@ const Web3 = require('web3');
 
 const config = require('../config');
 
-const ABI = fs.readFileSync(__dirname + "/ABI.txt", "utf8").trim();
-const address = fs.readFileSync(__dirname + "/contractAddress.txt", "utf8").trim();
+const bettingABI = fs.readFileSync(__dirname + "/BettingABI.txt", "utf8").trim();
+const betABI = fs.readFileSync(__dirname + "/BetABI.txt", "utf8").trim();
+const bettingCode = fs.readFileSync(__dirname + "/Betting.txt", "utf8").trim();
+const betCode = fs.readFileSync(__dirname + "/Bet.txt", "utf8").trim();
+//const address = fs.readFileSync(__dirname + "/contractAddress.txt", "utf8").trim();
 
 const web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider(config.getGethUrl()));
 web3.eth.defaultAccount = web3.eth.accounts[0]; // otherwise have to specify `from` while making each transaction
-const contractInstance = web3.eth.contract(JSON.parse(ABI)).at(address);
+const bettingContract = web3.eth.contract(JSON.parse(bettingABI));
+const betContract = web3.eth.contract(JSON.parse(betABI));
 
+let bettingContractInstance;
+let betContractInstance;
+bettingContract.new(100, { data: bettingCode, gas: 4712388 }, function (error, contract) {
+  if (typeof contract.address !== 'undefined') {
+    bettingContractInstance = web3.eth.contract(JSON.parse(bettingABI)).at(contract.address);
+    betContract.new(bettingContractInstance.address, { data: betCode, gas: 4712388 }, function (error, contract) {
+      if (typeof contract.address !== 'undefined') {
+        betContractInstance = web3.eth.contract(JSON.parse(betABI)).at(contract.address);;
+        bettingContractInstance.newRound.sendTransaction(betContractInstance.address);
+        console.log("Contract Intialized and Set");
+      } else if(error){
+        console.log("Error deploying  bet:"+error);
+      }
+    });
+  } else if(error) {
+    console.log("Error deploying  betting:"+error);
+  }
+});
 
 const getLeaderboard = () => {
   const response = contractInstance.getLeaderboard();
@@ -31,15 +53,16 @@ const getLeaderboard = () => {
 };
 
 const getUserBalance = username => {
-  return parseInt(contractInstance.getBalance(username));
+  return parseInt(bettingContractInstance.getBalance(username));
 };
 
 const placeBet = (username, prediction, betAmount) => {
-  return contractInstance.placeBet.sendTransaction(username, prediction, betAmount);
+  console.log(typeof username,typeof  prediction,typeof  betAmount);
+  return bettingContractInstance.placeBet.sendTransaction(username, prediction, betAmount);
 };
 
 const registerUser = username => {
-  return contractInstance.register.sendTransaction(username);
+  return bettingContractInstance.register.sendTransaction(username);
 };
 
 // smart contract returns text in ascii
