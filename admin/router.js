@@ -17,10 +17,9 @@ router.use((req, res, next) => {
 });
 
 router.get('/leaderboard', controller.getLeaderboard);
-router.get('/wallet', controller.getWallet);
 
-router.post('/predict', controller.makePrediction);
-router.post('/sign-in', controller.signIn);
-router.post('/sign-up', controller.signUp);
+router.post('/declare', controller.declare);
+router.post('/resolve', controller.resolve);
+router.post('/new-round', controller.newRound);
 
 module.exports = router;

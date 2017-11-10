@@ -7,16 +7,24 @@ const getLeaderboard = (req, res) => {
   return res.json(blockchainService.getLeaderboard());
 };
 
-const getWallet = (req, res) => {
-  req.query.username = req.query.username.toLowerCase();
-  const balance = blockchainService.getUserBalance(req.query.username);
-  return res.json({ balance });
-};
-
-const makePrediction = (req, res) => {
-  const txHash = blockchainService.placeBet(req.body.username, req.body.prediction, req.body.coins);
+const declare = (req, res) => {
+  const txHash = blockchainService.declare();
   return res.status(202).json({ txHash });
 };
+
+const resolve = (req, res) => {
+  const txHash = blockchainService.resolve();
+  return res.status(202).json({ txHash });
+};
+
+const newRound = (req, res) => {
+  blockchainService.newRound().then(txHash => {
+    res.status(202).json({ txHash });
+  }).catch(error => {
+    res.status(500).json({ error })
+  });
+};
+
 
 const signIn = (req, res) => {
   validateAuthFields(req, res);
@@ -49,9 +57,10 @@ const validateAuthFields = (req, res) => {
 
 
 module.exports = {
-  getLeaderboard,
-  getWallet,
-  makePrediction,
   signIn,
-  signUp
+  signUp,
+  getLeaderboard,
+  declare,
+  resolve,
+  newRound
 };

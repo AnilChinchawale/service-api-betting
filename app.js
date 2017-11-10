@@ -7,7 +7,7 @@ const logger = require('morgan');
 
 const config = require('./config/');
 const users = require('./users/router');
-
+const admin = require('./admin/router')
 const app = express();
 
 app.use(config.getEnv() === 'development' ? logger('dev') : logger('combined'));
@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/api/users', users);
+app.use('/api/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
