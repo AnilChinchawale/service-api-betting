@@ -16,7 +16,11 @@ router.use((req, res, next) => {
   next();
 });
 
+
 router.get('/leaderboard', controller.getLeaderboard);
+
+router.post('/sign-in', controller.signIn);
+router.post('/sign-up', controller.signUp);
 
 router.post('/declare', controller.declare);
 router.post('/resolve', controller.resolve);

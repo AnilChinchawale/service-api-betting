@@ -18,7 +18,6 @@ const signUp = (username, password) => {
 
   // sign up admins
   admins[username] = password;
-  blockchainService.registerUser(username);
   return true;
 };
 
