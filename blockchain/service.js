@@ -42,6 +42,20 @@ const registerUser = username => {
   return contractInstance.register.sendTransaction(username);
 };
 
+
+// admin functions
+const createNewRound = () => {
+  return contractInstance.newRound.sendTransaction();
+};
+
+const declareRound = () => {
+  return contractInstance.declare.sendTransaction();
+};
+
+const resolveRound = () => {
+  return contractInstance.resolve.sendTransaction();
+};
+
 // smart contract returns text in ascii
 const hexToAscii = hex => web3.toAscii(hex).replace(/\u0000/g, '');
 
@@ -49,5 +63,10 @@ module.exports = {
   getLeaderboard,
   getUserBalance,
   placeBet,
-  registerUser
+  registerUser,
+
+  // admin functions
+  createNewRound,
+  declareRound,
+  resolveRound
 };
